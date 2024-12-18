@@ -1,0 +1,8 @@
+{
+  "singleQuote":true,
+  "tsxSilgeQuote":true,
+  "trailingComma":"es5",
+  "tabWith":2,
+  "semi":true,
+  "singleAttrivutePerLine":true
+}
