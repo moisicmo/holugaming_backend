@@ -15,13 +15,13 @@ export class AuthMiddleware {
     try {
       const payload = await JwtAdapter.validateToken<{ id: number }>(token);
       if ( !payload ) return res.status(401).json({ error: 'Invalid token' })
-      const user = await prisma.users.findFirst({
-        where: {
-          id: payload.id 
-        }
-      });
-      if ( !user ) return res.status(401).json({ error: 'Invalid token - user' });
-      req.body.user = UserEntity.fromObjectAuth(user);
+      // const user = await prisma.users.findFirst({
+      //   where: {
+      //     id: payload.id 
+      //   }
+      // });
+      // if ( !user ) return res.status(401).json({ error: 'Invalid token - user' });
+      // req.body.user = UserEntity.fromObjectAuth(user);
       next();
     } catch (error) {
       console.log(error);

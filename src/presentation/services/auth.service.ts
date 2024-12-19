@@ -20,45 +20,45 @@ export class AuthService {
 
   public async loginUser(dto: LoginUserDto) {
 
-    const user = await prisma.users.findFirst({
-      where: {
-        contacts: {
-          some: {
-            typeContact: dto.typeContact,
-            data: dto.data,
-          },
-        },
-      },
-      include: {
-        contacts: true,
-        staff: {
-          include: {
-            role: {
-              include: {
-                permissions: true,
-              },
-            },
-          },
-        },
-        student: true,
-        teacher: true,
-        customer: true,
-        branches: {
-          include: {
-            business: true,
-          }
-        },
-      }
-    })
-    if (!user) throw CustomError.badRequest('No se pudo autenticar al usuario');
+    // const user = await prisma.users.findFirst({
+    //   where: {
+    //     contacts: {
+    //       some: {
+    //         typeContact: dto.typeContact,
+    //         data: dto.data,
+    //       },
+    //     },
+    //   },
+    //   include: {
+    //     contacts: true,
+    //     staff: {
+    //       include: {
+    //         role: {
+    //           include: {
+    //             permissions: true,
+    //           },
+    //         },
+    //       },
+    //     },
+    //     student: true,
+    //     teacher: true,
+    //     customer: true,
+    //     branches: {
+    //       include: {
+    //         business: true,
+    //       }
+    //     },
+    //   }
+    // })
+    // if (!user) throw CustomError.badRequest('No se pudo autenticar al usuario');
 
-    const isMatching = bcryptAdapter.compare(
-      dto.password,
-      user.password
-    );
-    if (!isMatching) throw CustomError.badRequest('La Contraseña no es valida');
-    const token = await JwtAdapter.generateToken({ id: user.id });
-    if (!token) throw CustomError.internalServer('Error al crear la llave');
+    // const isMatching = bcryptAdapter.compare(
+    //   dto.password,
+    //   user.password
+    // );
+    // if (!isMatching) throw CustomError.badRequest('La Contraseña no es valida');
+    // const token = await JwtAdapter.generateToken({ id: user.id });
+    // if (!token) throw CustomError.internalServer('Error al crear la llave');
 
     // if (!user.contacts[0].validated) {
     //   const codeValidation = await this.sendEmailValidationLink(
@@ -74,14 +74,14 @@ export class AuthService {
     //     result: { token },
     //   });
     // }
-    const { ...userEntity } = UserEntity.fromObjectAuth(user);
+    // const { ...userEntity } = UserEntity.fromObjectAuth(user);
 
-    return CustomSuccessful.response({
-      result: {
-        user: userEntity,
-        token: token,
-      },
-    });
+    // return CustomSuccessful.response({
+    //   result: {
+    //     user: userEntity,
+    //     token: token,
+    //   },
+    // });
   }
 
   public validateEmail = async (validateUserDto: ValidateUserDto, user: UserEntity) => {
