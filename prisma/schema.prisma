@@ -17,6 +17,7 @@ model Games {
   id                    Int                 @id @default(autoincrement())
   name                  String              @db.VarChar(255)
   type                  Game_type
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   tournaments           Tournaments[]
@@ -29,26 +30,28 @@ model Applications {
   status                Status              @default(PENDING)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
-  Team                  Teams               @relation(fields: [teamId], references: [id])
+  team                  Teams               @relation(fields: [teamId], references: [id])
 }
 model Teams {
   id                    Int                 @id @default(autoincrement())
+  gameId                Int                 @db.Integer
   name                  String?             @db.VarChar(255)
-  shield_url            String?             @db.VarChar(255)
-  isProvisional         Boolean             @default(true)
+  shieldUrl             String?             @db.VarChar(255)
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
+  game                  Games               @relation(fields: [gameId], references: [id])
   teamToPlayers         TeamToPlayers[]
   inscriptions          Inscriptions[]
   matchToTeams          MatchToTeams[]
-  games                 Games[]
   teams                 Applications[]
 }
 model TeamToPlayers {
   teamId                Int                 @db.Integer
   playerId              Int                 @db.Integer
-  rol                   Role                @default(CAPTAIN)
+  role                  Role                @default(CAPTAIN)
   nick                  String              @db.VarChar(255)
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   team                  Teams               @relation(fields: [teamId], references: [id])
   @@unique([teamId,playerId])
@@ -60,9 +63,10 @@ model Tournaments {
   numberTeams           Int                 @db.Integer
   start                 DateTime            @db.Date
   end                   DateTime            @db.Date
-  amount                Float               @default(0.00)
-  player_count          Int                 @db.Integer
-  substitute_count      Int
+  inscriptionCost       Float               @default(0.00)
+  playerCount           Int                 @db.Integer
+  substituteCount       Int                 @db.Integer
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   inscriptions          Inscriptions[]
@@ -73,8 +77,13 @@ model Phases {
   id                    Int                 @id @default(autoincrement())
   tournamentId          Int                 @db.Integer
   name                  String              @db.VarChar(255)
-  phase_type            Phase_type
-  team_count            Int                 @db.Integer
+  phaseType             Phase_type
+  matchDefinition       Int                 @db.Integer
+  teamsInput            Int                 @db.Integer
+  teamsOutput           Int                 @db.Integer
+  start                 DateTime            @db.Date
+  end                   DateTime            @db.Date
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   matches               Matches[]
@@ -83,7 +92,9 @@ model Phases {
 model Matches {
   id                    Int                 @id @default(autoincrement())
   phaseId               Int
+  description           String              @db.VarChar(255)
   schedule              DateTime            @db.Date
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   phase                 Phases              @relation(fields: [phaseId], references: [id])
@@ -94,6 +105,7 @@ model ReportMatches {
   id                    Int                @id @default(autoincrement())
   matchId               Int                @db.Integer
   rezon                 String             @db.VarChar(255)
+  state                 Boolean             @default(true)
   createdAt             DateTime           @default(now())
   updatedAt             DateTime           @updatedAt
   matches               Matches            @relation(fields: [matchId], references: [id])
@@ -103,6 +115,7 @@ model MatchToTeams {
   teamId                Int                 @db.Integer
   score                 Int
   isWinner              Boolean             @default(false)
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   matche                Matches             @relation(fields: [matchId], references: [id])
@@ -114,6 +127,7 @@ model Inscriptions {
   teamId                Int                 @db.Integer
   tournamentId          Int                 @db.Integer
   isPayment             Boolean             @default(false)  
+  state                 Boolean             @default(true)
   createdAt             DateTime            @default(now())
   updatedAt             DateTime            @updatedAt
   team                  Teams               @relation(fields: [teamId], references: [id])

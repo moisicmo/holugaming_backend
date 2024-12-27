@@ -7,39 +7,18 @@ export * from '@/domain/enums/educationLevel';
 export * from '@/domain/enums/gender';
 
 // DTOS
-export * from '@/domain/dtos/user/user.dto';
-export * from '@/domain/dtos/user/staff.dto';
-export * from '@/domain/dtos/user/student.dto';
-export * from '@/domain/dtos/user/tutor.dto';
-export * from '@/domain/dtos/user/teacher.dto';
-export * from '@/domain/dtos/user/customer.dto';
-export * from '@/domain/dtos/user/player.dto';
-
-export * from '@/domain/dtos/branch.dto';
-export * from '@/domain/dtos/register-user.dto';
-export * from '@/domain/dtos/login-user.dto';
-export * from '@/domain/dtos/validate.dto';
-export * from '@/domain/dtos/role.dto';
-export * from '@/domain/dtos/business.dto';
-export * from '@/domain/dtos/plans.dto';
-export * from '@/domain/dtos/subscription.dto';
+export * from '@/domain/dtos/team.dto';
+export * from '@/domain/dtos/teamToPlayer.dto';
+export * from '@/domain/dtos/inscription.dto';
+export * from '@/domain/dtos/tournament.dto';
 
 // ENTITIES
 export * from '@/domain/entities/user/user.entity';
-export * from '@/domain/entities/user/staff.entity';
-export * from '@/domain/entities/user/student.entity';
-export * from '@/domain/entities/user/teacher.entity';
-export * from '@/domain/entities/user/customer.entity';
-export * from '@/domain/entities/user/tutor.entity';
-export * from '@/domain/entities/user/player.entity';
-
-export * from '@/domain/entities/branch.entity';
-export * from '@/domain/entities/role.entity';
-export * from '@/domain/entities/permission.entity';
-export * from '@/domain/entities/business.entity';
-export * from '@/domain/entities/contact.entity';
-export * from '@/domain/entities/plans.entity';
-export * from '@/domain/entities/subscription.entity';
+export * from '@/domain/entities/team.entity';
+export * from '@/domain/entities/teamToPlayer.entity';
+export * from '@/domain/entities/inscription.entity';
+export * from '@/domain/entities/tournament.entity';
+export * from '@/domain/entities/game.entity';
 
 // PAGINATION
 export * from '@/domain/dtos/pagination.dto';

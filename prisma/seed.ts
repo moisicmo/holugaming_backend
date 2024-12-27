@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Game_type, Phase_type, PrismaClient } from '@prisma/client';
 // import { envs } from '../src/config/envs';
 // import { bcryptAdapter } from '../src/config/bcrypt.adapter';
 
@@ -92,35 +92,107 @@ async function main() {
     //   `);
 
 
-    // // CREAR PLANES
-    // const plans = await prisma.plans.createManyAndReturn({
-    //   data: [
-    //     {
-    //       name: 'Inicial',
-    //       price: 0.0,
-    //       discountPrice: 0.0,
-    //       typePlan: 'BASICO',
-    //       billingCycle: 30,
-    //       state: true,
-    //     },
-    //     {
-    //       name: 'Moderado',
-    //       price: 50.0,
-    //       discountPrice: 0.0,
-    //       typePlan: 'PREMIUM',
-    //       billingCycle: 30,
-    //       state: true,
-    //     },
-    //     {
-    //       name: 'Pro',
-    //       price: 100.0,
-    //       discountPrice: 0.0,
-    //       typePlan: 'EMPRESARIAL',
-    //       billingCycle: 30,
-    //       state: true,
-    //     }
-    //   ]
-    // });
+    // CREAR JUEGOS
+    const games = await prisma.games.createManyAndReturn({
+      data: [
+        {
+          name: 'Dota 1 RGC',
+          type: Game_type.MOVA,
+          state: true,
+        },
+        {
+          name: 'Dota 1 ATINAD',
+          type: Game_type.MOVA,
+          state: true,
+        },
+        {
+          name: 'Dota 2',
+          type: Game_type.MOVA,
+          state: true,
+        }
+      ]
+    });
+    // CREAR TORNEO
+    const tournament = await prisma.tournaments.create({
+      data: {
+        gameId: games[0].id,
+        name: 'Torneo HoluGaming Dota 1',
+        numberTeams: 16,
+        start: new Date(),
+        end: new Date(),
+        inscriptionCost: 25.0,
+        playerCount: 5,
+        substituteCount: 2,
+      }
+    });
+    // CREAR FASES
+    const phases = await prisma.phases.createManyAndReturn({
+      data: [
+        {
+          tournamentId: tournament.id,
+          name: 'Bo1',
+          phaseType: Phase_type.kNOcKOUT,
+          matchDefinition: 1,
+          teamsInput: 16,
+          teamsOutput: 4,
+          start: new Date(),
+          end: new Date(),
+        },
+        {
+          tournamentId: tournament.id,
+          name: 'Liguilla',
+          phaseType: Phase_type.ROUND_ROBIN,
+          matchDefinition: 1,
+          teamsInput: 4,
+          teamsOutput: 2,
+          start: new Date(),
+          end: new Date(),
+        },
+        {
+          tournamentId: tournament.id,
+          name: 'Bo3',
+          phaseType: Phase_type.kNOcKOUT,
+          matchDefinition: 3,
+          teamsInput: 2,
+          teamsOutput: 1,
+          start: new Date(),
+          end: new Date(),
+        }
+      ]
+    })
+    // GENERAR MATCHES DINÁMICAMENTE
+    phases.forEach(async (phase) => {
+      let totalMatches: number = 0;
+    
+      switch (phase.phaseType) {
+        case Phase_type.ROUND_ROBIN:
+          totalMatches = ((phase.teamsInput * (phase.teamsInput - 1)) / 2) * phase.matchDefinition;
+          break;
+    
+        case Phase_type.kNOcKOUT:
+          let currentTeams = phase.teamsInput;
+          while (currentTeams > phase.teamsOutput) {
+            totalMatches += (currentTeams / 2) * phase.matchDefinition;
+            currentTeams = currentTeams / 2;
+          }
+          break;
+      }
+    
+      console.log(`Total de partidos para la fase ${phase.name}:`, totalMatches);
+    
+      // Crear los partidos dinámicamente
+      for (let i = 0; i < totalMatches; i++) {
+        await prisma.matches.create({
+          data: {
+            phaseId: phase.id,
+            description: `Match ${i + 1} of Phase ${phase.name}`,
+            schedule: new Date(),
+          },
+        });
+      }
+    });
+    
+
     // // CREAR USUARIO
     // const user = await prisma.users.create({
     //   data: {
