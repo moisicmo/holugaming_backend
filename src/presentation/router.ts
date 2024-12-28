@@ -11,9 +11,9 @@ export class AppRoutes {
     const router = Router();
 
     // Definir las rutas
-    router.use('/holu/api/team', TeamRoutes.routes);
-    router.use('/holu/api/inscription', InscriptionRoutes.routes);
-    router.use('/holu/api/tournament', TournamentRoutes.routes);
+    router.use('/holu/team', TeamRoutes.routes);
+    router.use('/holu/inscription', InscriptionRoutes.routes);
+    router.use('/holu/tournament', TournamentRoutes.routes);
     
     return router;
   }
