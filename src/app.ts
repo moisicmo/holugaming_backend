@@ -1,3 +1,4 @@
+require('module-alias/register');
 import { PrismaClient } from '@prisma/client'
 import { envs } from '@/config/envs';
 import { Server } from '@/server';

@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import {
   TeamDto,
   TeamEntity,
-  UserEntity,
   CustomError,
   PaginationDto,
   CustomSuccessful,
@@ -12,7 +11,7 @@ import {
 const prisma = new PrismaClient();
 
 export class TeamService {
-  constructor() {}
+  constructor() { }
   // OBTENER TODOS LOS EQUIPOS
   async getTeams(paginationDto: PaginationDto) {
     const { page, limit } = paginationDto;
@@ -49,7 +48,7 @@ export class TeamService {
     }
   }
   // CREAR TEAM
-  async createTeam(dto: TeamDto, user: UserEntity) {
+  async createTeam(dto: TeamDto) {
     try {
       let team = await prisma.teams.findFirst({
         where: {
@@ -57,8 +56,20 @@ export class TeamService {
         },
       });
       if (team) throw CustomError.badRequest('El equipo ya existe');
+      // Validamos que los jugadores no estén en otro equipo
+      for (const player of dto.players) {
+        const existingPlayerTeam = await prisma.teamToPlayers.findFirst({
+          where: {
+            playerId: player.playerId,
+          },
+        });
+
+        if (existingPlayerTeam) {
+          throw CustomError.badRequest(`El jugador ${player.nick} ya está en otro equipo.`);
+        }
+      }
       // creamos al equipo
-      team =  await prisma.teams.create({
+      team = await prisma.teams.create({
         data: {
           gameId: dto.gameId,
           name: dto.name,
@@ -81,7 +92,7 @@ export class TeamService {
     }
   }
   // EDITAR EQUIPO
-  async updateTeam(dto: TeamDto, user: UserEntity, userId: number) {
+  async updateTeam(dto: TeamDto,  userId: number) {
     const teamExists = await prisma.teams.findFirst({
       // where: { userId: userId },
       include: {
@@ -116,7 +127,7 @@ export class TeamService {
     }
   }
   // ELIMINAR EQUIPO
-  async deleteTeam(user: UserEntity, userId: number) {
+  async deleteTeam(userId: number) {
     // const tutorExists = await prisma.tutors.findFirst({
     //   where: { userId: userId },
     // });

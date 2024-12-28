@@ -36,19 +36,10 @@ export class TournamentController {
     if (error) return res.status(400).json({ error });
 
     this.service
-      .createTournament(dto!, req.body.user)
+      .createTournament(dto!)
       .then((data) => res.status(201).json(data))
       .catch((error) => this.handleError(error, res));
   };
 
-  updateTournament = (req: Request, res: Response) => {
-    const [error, dto] = TournamentDto.body(req.body);
-    if (error) return res.status(400).json({ error });
-
-    this.service
-      .updateTournament(dto!, req.body.user, parseInt(req.params.id))
-      .then((data) => res.status(201).json(data))
-      .catch((error) => this.handleError(error, res));
-  };
 
 }

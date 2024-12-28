@@ -9,8 +9,6 @@ export class TeamRoutes {
     // rutas
     router.get('/', [AuthMiddleware.validateJWT], controller.getTeams);
     router.post('/', [AuthMiddleware.validateJWT], controller.createTeam);
-    router.put('/:id', [AuthMiddleware.validateJWT], controller.updateTeam);
-    router.delete('/:id', [AuthMiddleware.validateJWT], controller.deleteTeam);
     return router;
   }
 }

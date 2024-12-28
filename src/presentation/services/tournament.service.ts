@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import {
   TournamentDto,
   TournamentEntity,
-  UserEntity,
   CustomError,
   PaginationDto,
   CustomSuccessful,
@@ -58,6 +57,9 @@ export class TournamentService {
         },
         include: {
           inscriptions:{
+            where: {
+              state: true
+            },
             include:{
               team:{
                 include:{
@@ -77,7 +79,7 @@ export class TournamentService {
     }
   }
   // CREAR INSCRIPCIÓN
-  async createTournament(dto: TournamentDto, user: UserEntity) {
+  async createTournament(dto: TournamentDto) {
     try {
       let tournament = await prisma.tournaments.findFirst({
         where: {
@@ -106,7 +108,7 @@ export class TournamentService {
     }
   }
   // EDITAR INSCRIPCIÓN
-  async updateTournament(dto: TournamentDto, user: UserEntity, userId: number) {
+  async updateTournament(dto: TournamentDto, userId: number) {
     const teamExists = await prisma.teams.findFirst({
       // where: { userId: userId },
       include: {

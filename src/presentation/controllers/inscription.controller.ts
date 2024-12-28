@@ -29,19 +29,10 @@ export class InscriptionController {
     if (error) return res.status(400).json({ error });
 
     this.service
-      .createInscription(dto!, req.body.user)
+      .createInscription(dto!)
       .then((data) => res.status(201).json(data))
       .catch((error) => this.handleError(error, res));
   };
 
-  updateInscription = (req: Request, res: Response) => {
-    const [error, dto] = InscriptionDto.body(req.body);
-    if (error) return res.status(400).json({ error });
-
-    this.service
-      .updateInscription(dto!, req.body.user, parseInt(req.params.id))
-      .then((data) => res.status(201).json(data))
-      .catch((error) => this.handleError(error, res));
-  };
 
 }

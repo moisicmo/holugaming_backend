@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
 import { JwtAdapter } from '@/config';
-import { UserEntity } from '@/domain';
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();

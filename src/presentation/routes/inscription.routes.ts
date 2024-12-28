@@ -9,7 +9,6 @@ export class InscriptionRoutes {
     // rutas
     router.get('/', [AuthMiddleware.validateJWT], controller.getInscriptions);
     router.post('/', [AuthMiddleware.validateJWT], controller.createInscription);
-    router.put('/:id', [AuthMiddleware.validateJWT], controller.updateInscription);
     return router;
   }
 }

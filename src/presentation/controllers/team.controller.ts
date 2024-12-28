@@ -29,24 +29,7 @@ export class TeamController {
     if (error) return res.status(400).json({ error });
 
     this.service
-      .createTeam(dto!, req.body.user)
-      .then((data) => res.status(201).json(data))
-      .catch((error) => this.handleError(error, res));
-  };
-
-  updateTeam = (req: Request, res: Response) => {
-    const [error, dto] = TeamDto.body(req.body);
-    if (error) return res.status(400).json({ error });
-
-    this.service
-      .updateTeam(dto!, req.body.user, parseInt(req.params.id))
-      .then((data) => res.status(201).json(data))
-      .catch((error) => this.handleError(error, res));
-  };
-
-  deleteTeam = (req: Request, res: Response) => {
-    this.service
-      .deleteTeam(req.body.user, parseInt(req.params.id))
+      .createTeam(dto!)
       .then((data) => res.status(201).json(data))
       .catch((error) => this.handleError(error, res));
   };

@@ -10,7 +10,6 @@ export class TournamentRoutes {
     router.get('/', controller.getTournaments);
     router.get('/:id', controller.getTournamentById);
     router.post('/', [AuthMiddleware.validateJWT], controller.createTournament);
-    router.put('/:id', [AuthMiddleware.validateJWT], controller.updateTournament);
     return router;
   }
 }

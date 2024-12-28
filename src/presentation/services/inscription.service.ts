@@ -2,7 +2,6 @@ import { PrismaClient } from '@prisma/client';
 import {
   InscriptionDto,
   InscriptionEntity,
-  UserEntity,
   CustomError,
   PaginationDto,
   CustomSuccessful,
@@ -49,12 +48,13 @@ export class InscriptionService {
     }
   }
   // CREAR INSCRIPCIÓN
-  async createInscription(dto: InscriptionDto, user: UserEntity) {
+  async createInscription(dto: InscriptionDto) {
     try {
       let inscription = await prisma.inscriptions.findFirst({
         where: {
           teamId: dto.teamId,
           tournamentId: dto.tournamentId,
+          state:true,
         },
       });
       if (inscription) throw CustomError.badRequest('La inscripción ya existe');
@@ -65,10 +65,13 @@ export class InscriptionService {
           tournamentId: dto.tournamentId,
         },
         include:{
-          team:true
+          team:{
+            include:{
+              teamToPlayers:true
+            }
+          }
         }
       });
-      console.log(JSON.stringify(inscription));
       const { ...inscriptionEntity } = InscriptionEntity.fromObject(inscription);
       return CustomSuccessful.response({ result: inscriptionEntity });
     } catch (error) {
@@ -76,7 +79,7 @@ export class InscriptionService {
     }
   }
   // EDITAR INSCRIPCIÓN
-  async updateInscription(dto: InscriptionDto, user: UserEntity, userId: number) {
+  async updateInscription(dto: InscriptionDto, userId: number) {
     const teamExists = await prisma.teams.findFirst({
       // where: { userId: userId },
       include: {

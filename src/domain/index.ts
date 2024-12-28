@@ -13,7 +13,6 @@ export * from '@/domain/dtos/inscription.dto';
 export * from '@/domain/dtos/tournament.dto';
 
 // ENTITIES
-export * from '@/domain/entities/user/user.entity';
 export * from '@/domain/entities/team.entity';
 export * from '@/domain/entities/teamToPlayer.entity';
 export * from '@/domain/entities/inscription.entity';
